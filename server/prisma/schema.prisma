@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String
+  age       Int
+  gender    String
+  star      String    // Nakshatra
+  phone     String
+  role      String    @default("USER") // USER or ADMIN
+  bookings  Booking[]
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  name        String
+  date        DateTime
+  description String
+}
+
+model Pooja {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  rate        Float
+  isActive    Boolean   @default(true)
+  bookings    Booking[]
+}
+
+model Booking {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  poojaId      Int
+  pooja        Pooja    @relation(fields: [poojaId], references: [id])
+  devoteeName  String
+  devoteeStar  String
+  date         DateTime
+  status       String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED
+  createdAt    DateTime @default(now())
+}
