@@ -18,24 +18,32 @@ export default function Login() {
             const res = await axios.post('/api/auth/login', form);
             const userData = res.data.user;
 
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('user', JSON.stringify(userData));
-
-            // ROBUST REDIRECT LOGIC
-            if (userData.role === 'ADMIN') {
-                // Admins always go to dashboard, ignoring other intents
-                navigate('/admin/bookings');
-            } else {
-                // If user tried to access Admin Login page, warn them?
-                if (isAdmin) {
-                    setError("This account is not an Administrator.");
-                    localStorage.clear();
-                    return;
+            // STRICT ROLE ENFORCEMENT
+            if (isAdmin) {
+                // Case 1: On Admin Page, but not an Admin
+                if (userData.role !== 'ADMIN') {
+                    setError("Access Denied: Only Administrators can login here.");
+                    return; // Stop execution
                 }
-                // Regular user redirect
+                // Success: Admin on Admin Page
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(userData));
+                navigate('/admin/bookings');
+
+            } else {
+                // Case 2: On Devotee Page, but is an Admin
+                if (userData.role === 'ADMIN') {
+                    setError("Administrators must login via the Admin Portal.");
+                    return; // Stop execution
+                }
+                // Success: User on Devotee Page
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(userData));
+
                 if (location.state?.from) navigate(location.state.from);
                 else navigate('/');
             }
+
         } catch (err) {
             console.error("Login error:", err);
             setError(err.response?.data?.error || 'Invalid credentials');
