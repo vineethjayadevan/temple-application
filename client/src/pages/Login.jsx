@@ -16,14 +16,29 @@ export default function Login() {
         e.preventDefault();
         try {
             const res = await axios.post('/api/auth/login', form);
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('user', JSON.stringify(res.data.user));
+            const userData = res.data.user;
 
-            if (res.data.user.role === 'ADMIN') navigate('/admin/events');
-            else if (location.state?.from) navigate(location.state.from);
-            else navigate('/');
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(userData));
+
+            // ROBUST REDIRECT LOGIC
+            if (userData.role === 'ADMIN') {
+                // Admins always go to dashboard, ignoring other intents
+                navigate('/admin/bookings');
+            } else {
+                // If user tried to access Admin Login page, warn them?
+                if (isAdmin) {
+                    setError("This account is not an Administrator.");
+                    localStorage.clear();
+                    return;
+                }
+                // Regular user redirect
+                if (location.state?.from) navigate(location.state.from);
+                else navigate('/');
+            }
         } catch (err) {
-            setError('Invalid credentials');
+            console.error("Login error:", err);
+            setError(err.response?.data?.error || 'Invalid credentials');
         }
     };
 
