@@ -1,9 +1,10 @@
 {
-  "dependencies": {
-    "autoprefixer": "^10.4.23",
-    "axios": "^1.13.2",
-    "postcss": "^8.5.6",
-    "react-router-dom": "^7.11.0",
-    "tailwindcss": "^4.1.18"
-  }
+  "name": "temple-application",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm install --prefix client && npm run build --prefix client && npm install --prefix server",
+    "start": "node server/index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
 }
