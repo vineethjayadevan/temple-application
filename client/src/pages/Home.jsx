@@ -17,8 +17,8 @@ export default function Home() {
         const storedUser = localStorage.getItem('user');
         if (storedUser) setUser(JSON.parse(storedUser));
 
-        axios.get('http://localhost:3000/api/events').then(res => setEvents(res.data));
-        axios.get('http://localhost:3000/api/poojas').then(res => setPoojas(res.data));
+        axios.get('/api/events').then(res => setEvents(res.data));
+        axios.get('/api/poojas').then(res => setPoojas(res.data));
     }, []);
 
     const scrollRef = useRef(null);
@@ -197,7 +197,7 @@ function UserBookingsList({ userId, poojas }) {
     const [editingBooking, setEditingBooking] = useState(null);
 
     const fetchBookings = () => {
-        axios.get('http://localhost:3000/api/bookings').then(res => {
+        axios.get('/api/bookings').then(res => {
             const myBookings = res.data.filter(b => b.userId === userId || (b.user && b.user.id === userId));
             setBookings(myBookings);
         });
@@ -216,7 +216,7 @@ function UserBookingsList({ userId, poojas }) {
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to cancel this booking?")) return;
         try {
-            await axios.delete(`http://localhost:3000/api/bookings/${id}`);
+            await axios.delete(`/api/bookings/${id}`);
             alert("Booking cancelled.");
             fetchBookings();
         } catch (err) {
@@ -226,7 +226,7 @@ function UserBookingsList({ userId, poojas }) {
 
     const handleUpdate = async (id, data) => {
         try {
-            await axios.put(`http://localhost:3000/api/bookings/${id}`, data);
+            await axios.put(`/api/bookings/${id}`, data);
             alert("Booking updated.");
             setEditingBooking(null);
             fetchBookings();

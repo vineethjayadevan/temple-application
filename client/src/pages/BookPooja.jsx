@@ -23,7 +23,7 @@ export default function BookPooja() {
         // Initialize first entry with logged-in user's data
         setEntries([{ name: parsedUser.name, star: parsedUser.star || '', poojaId: '' }]);
 
-        axios.get('http://localhost:3000/api/poojas').then(res => setPoojas(res.data));
+        axios.get('/api/poojas').then(res => setPoojas(res.data));
     }, [navigate]);
 
     const handleEntryChange = (index, field, value) => {
@@ -68,7 +68,7 @@ export default function BookPooja() {
 
         try {
             const promises = entries.map(entry =>
-                axios.post('http://localhost:3000/api/bookings', {
+                axios.post('/api/bookings', {
                     userId: user.id,
                     poojaId: parseInt(entry.poojaId),
                     date: date,

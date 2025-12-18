@@ -9,7 +9,7 @@ export default function Events() {
 
     const fetchEvents = async () => {
         try {
-            const res = await axios.get('http://localhost:3000/api/events');
+            const res = await axios.get('/api/events');
             setEvents(res.data);
         } catch (err) {
             console.error("Failed to fetch events", err);
@@ -22,11 +22,11 @@ export default function Events() {
         e.preventDefault();
         try {
             if (isEditing) {
-                await axios.put(`http://localhost:3000/api/events/${editId}`, form);
+                await axios.put(`/api/events/${editId}`, form);
                 setIsEditing(false);
                 setEditId(null);
             } else {
-                await axios.post('http://localhost:3000/api/events', form);
+                await axios.post('/api/events', form);
             }
             setForm({ name: '', date: '', description: '' });
             fetchEvents();

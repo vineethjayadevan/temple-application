@@ -8,7 +8,7 @@ export default function Poojas() {
 
     const fetchPoojas = async () => {
         try {
-            const res = await axios.get('http://localhost:3000/api/poojas');
+            const res = await axios.get('/api/poojas');
             setPoojas(res.data);
         } catch (err) {
             console.error("Failed to fetch poojas", err);
@@ -20,7 +20,7 @@ export default function Poojas() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3000/api/poojas', {
+            await axios.post('/api/poojas', {
                 ...form,
                 rate: parseFloat(form.rate)
             });
@@ -33,7 +33,7 @@ export default function Poojas() {
 
     const handleUpdate = async (id) => {
         try {
-            await axios.put(`http://localhost:3000/api/poojas/${id}`, {
+            await axios.put(`/api/poojas/${id}`, {
                 name: editing.name,
                 rate: parseFloat(editing.rate),
                 description: editing.description // Keep description for consistency
@@ -48,7 +48,7 @@ export default function Poojas() {
     const handleDelete = async (id) => {
         if (!confirm("Are you sure?")) return;
         try {
-            await axios.delete(`http://localhost:3000/api/poojas/${id}`);
+            await axios.delete(`/api/poojas/${id}`);
             fetchPoojas();
         } catch (err) {
             alert("Error deleting pooja");

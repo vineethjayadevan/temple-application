@@ -18,8 +18,8 @@ export default function AdminBookings() {
     const fetchData = async () => {
         try {
             const [poojaRes, bookingRes] = await Promise.all([
-                axios.get('http://localhost:3000/api/poojas'),
-                axios.get('http://localhost:3000/api/bookings')
+                axios.get('/api/poojas'),
+                axios.get('/api/bookings')
             ]);
             setPoojas(poojaRes.data);
             setBookings(bookingRes.data);
@@ -34,7 +34,7 @@ export default function AdminBookings() {
             const userStr = localStorage.getItem('user');
             const adminId = userStr ? JSON.parse(userStr).id : 1;
 
-            await axios.post('http://localhost:3000/api/bookings', {
+            await axios.post('/api/bookings', {
                 userId: adminId,
                 poojaId: parseInt(form.poojaId),
                 devoteeName: form.devoteeName,
@@ -58,7 +58,7 @@ export default function AdminBookings() {
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to cancel this booking?")) return;
         try {
-            await axios.delete(`http://localhost:3000/api/bookings/${id}`);
+            await axios.delete(`/api/bookings/${id}`);
             alert("Booking cancelled.");
             fetchData();
         } catch (err) {
@@ -68,7 +68,7 @@ export default function AdminBookings() {
 
     const handleUpdate = async (id, data) => {
         try {
-            await axios.put(`http://localhost:3000/api/bookings/${id}`, data);
+            await axios.put(`/api/bookings/${id}`, data);
             alert("Booking updated.");
             setEditingBooking(null);
             fetchData();
